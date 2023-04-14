@@ -8,7 +8,7 @@ module.exports = app => {
     // Create
     app.post('/account/create', async (req, res) => {
         var response = {};
-        const { rUsername, rPassword } = req.body;
+        const { rEmail, rUsername, rPassword } = req.body;
 
         if(1>10)
         {
@@ -26,7 +26,7 @@ module.exports = app => {
             return;
         }
 
-        var userAccount = await Account.findOne({ username: rUsername},'_id');
+        var userAccount = await Account.findOne({ email: rEmail, username: rUsername},'_id');
         if(userAccount == null){
             // Create a new account
             console.log("Create new account...")
@@ -40,6 +40,7 @@ module.exports = app => {
                 bcrypt.hash(rPassword, 10, async (err, hash) => {
                    
                     var newAccount = new Account({
+                        email: rEmail,
                         username : rUsername,
                         password : hash,
                         avatarPreset : "0,-,0,-,0",
@@ -53,7 +54,7 @@ module.exports = app => {
                 
                     response.code = 0;
                     response.msg = "Account created";
-                    response.data = ( ({username, experience,level,avatarPreset}) => ({ username, experience,level,avatarPreset }) )(newAccount);
+                    response.data = ( ({email,username, experience,level,avatarPreset}) => ({email, username, experience,level,avatarPreset }) )(newAccount);
                     res.send(response);
                     return;
                 });
