@@ -1,0 +1,27 @@
+{
+  "name": "backend-sofreverse",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "argon2": "^0.30.3",
+    "bcrypt": "^5.1.0",
+    "connect": "^3.7.0",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mongoose": "^7.0.3",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "serve-static": "^1.15.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.22"
+  }
+}
