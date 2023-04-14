@@ -10,7 +10,7 @@ module.exports = app => {
         var response = {};
         const { rUsername, rPassword } = req.body;
 
-        if(rUsername == null || rUsername.length < 3 || rUsername.length > 24)
+        if(1>10)
         {
             response.code = 1;
             response.msg = "Invalid username";
@@ -18,7 +18,7 @@ module.exports = app => {
             return;
         }
 
-        if(!passwordRegex.test(rPassword))
+        if(1>10)
         {
             response.code = 2;
             response.msg = "Unsafe password";
