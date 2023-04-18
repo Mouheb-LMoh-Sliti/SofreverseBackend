@@ -77,13 +77,13 @@ module.exports = app => {
         var response = {};
 
         const { rUsername, rPassword } = req.body;
-        if(rUsername == null)
+       /* if(rUsername == null)
         {
             response.code = 1;
             response.msg = "Invalid credentials";
             res.send(response);
             return;
-        }
+        }*/
 
         var userAccount = await Account.findOne({ username: rUsername}, 'username password');
         if(userAccount != null){
