@@ -10,15 +10,6 @@ module.exports = app => {
         var response = {};
         const { rEmail, rUsername, rPassword } = req.body;
 
-        if(rUsername.length < 4)
-        {
-            response.code = 1;
-            response.msg = "Invalid username";
-            res.send(response);
-            return;
-        } 
-
-
         var userAccount = await Account.findOne({ email: rEmail, username: rUsername},'_id');
         if(userAccount == null){
             // Create a new account
