@@ -10,13 +10,13 @@ module.exports = (app) => {
       const { rEmail, rUsername, rPassword } = req.body;
 
       // Check if account already exists
-      const existingAccount = await Account.findOne({ email: rEmail, username: rUsername }, '_id');
+      const existingAccount = await Account.findOne({username: rUsername });
       if (existingAccount) {
         return res.status(400).json({ error: 'Account already exists' });
       }
 
       // Generate a unique access token
-      const token = crypto.randomBytes(32).toString('hex');
+      //const token = crypto.randomBytes(32).toString('hex');
 
       // Hash password
       const hashedPassword = await bcrypt.hash(rPassword, 10);
