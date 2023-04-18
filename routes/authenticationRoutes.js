@@ -30,7 +30,6 @@ module.exports = (app) => {
         experience: 1,
         level: 1,
         lastAuthentication: Date.now(),
-        accessToken: token,
       });
 
       // Save account to database
@@ -38,7 +37,7 @@ module.exports = (app) => {
 
       // Return success response with account information
       const { email, username, experience, level, avatarPreset } = newAccount;
-      return res.json({ email, username, experience, level, avatarPreset, accessToken: token });
+      return res.json({ email, username, experience, level, avatarPreset, });
     } catch (err) {
       console.error(`Error creating account: ${err}`);
       return res.status(500).json({ error: 'An error occurred while creating the account' });
