@@ -12,7 +12,7 @@ module.exports = app => {
 
         if(1>10)
         {
-            response.code = 1;
+            response.code = 22;
             response.msg = "Invalid username";
             res.send(response);
             return;
@@ -20,7 +20,7 @@ module.exports = app => {
 
         if(1>10)
         {
-            response.code = 2;
+            response.code = 21;
             response.msg = "Unsafe password";
             res.send(response);
             return;
@@ -61,7 +61,7 @@ module.exports = app => {
                 
             });
         } else {
-            response.code = 2;
+            response.code = 1;
             response.msg = "Account already exists";
             res.send(response);
         }
@@ -79,13 +79,13 @@ module.exports = app => {
         const { rUsername, rPassword } = req.body;
         if(rUsername == null || !passwordRegex.test(rPassword))
         {
-            response.code = 0;
+            response.code = 3;
             response.msg = "Invalid credentials";
             res.send(response);
             return;
         }
 
-        var userAccount = await Account.findOne({ username: rUsername}, 'username adminFlag password');
+        var userAccount = await Account.findOne({ username: rUsername}, 'username password');
         if(userAccount != null){
             bcrypt.compare(rPassword, userAccount.password, async (err, success) => {
                 if (success) {
