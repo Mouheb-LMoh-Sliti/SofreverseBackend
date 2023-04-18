@@ -10,7 +10,7 @@ module.exports = app => {
         var response = {};
         const { rEmail, rUsername, rPassword } = req.body;
 
-        if(username == "" || username.length < 3 || username.length > 24)
+        if(rUsername.length < 4)
         {
             response.code = 1;
             response.msg = "Invalid username";
