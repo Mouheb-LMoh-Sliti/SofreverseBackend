@@ -3,7 +3,11 @@ const { Schema } = mongoose;
 
 const accountSchema = new Schema({
    
-    username: String,
+    username: 
+        { 
+        type: String,
+        unique: [true, "username already taken"]
+        },
     email:String,
     password: String,
     salt: String,

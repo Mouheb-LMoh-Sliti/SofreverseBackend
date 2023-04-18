@@ -15,8 +15,7 @@ module.exports = (app) => {
         return res.status(400).json({ error: 'Account already exists' });
       }
 
-      // Generate a unique access token
-      //const token = crypto.randomBytes(32).toString('hex');
+    
 
       // Hash password
       const hashedPassword = await bcrypt.hash(rPassword, 10);
@@ -36,8 +35,8 @@ module.exports = (app) => {
       await newAccount.save();
 
       // Return success response with account information
-      const { email, username, experience, level, avatarPreset } = newAccount;
-      return res.json({ email, username, experience, level, avatarPreset, });
+      const { username, email, experience, level, avatarPreset } = newAccount;
+      return res.json({  username,email, experience, level, avatarPreset, });
     } catch (err) {
       console.error(`Error creating account: ${err}`);
       return res.status(500).json({ error: 'An error occurred while creating the account' });
