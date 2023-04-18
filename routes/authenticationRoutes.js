@@ -77,7 +77,7 @@ module.exports = app => {
         var response = {};
 
         const { rUsername, rPassword } = req.body;
-        if(rUsername == null || !passwordRegex.test(rPassword))
+        if(rUsername == null)
         {
             response.code = 1;
             response.msg = "Invalid credentials";
