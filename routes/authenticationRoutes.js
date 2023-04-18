@@ -10,21 +10,14 @@ module.exports = app => {
         var response = {};
         const { rEmail, rUsername, rPassword } = req.body;
 
-       /* if(rUsername == "" || rUsername.length < 3 || rUsername.length > 24)
+        if(username == "" || username.length < 3 || username.length > 24)
         {
             response.code = 1;
             response.msg = "Invalid username";
             res.send(response);
             return;
-        } */
+        } 
 
-        if(rPassword[0]==null)
-        {
-            response.code = 2;
-            response.msg = "Unsafe password";
-            res.send(response);
-            return;
-        }
 
         var userAccount = await Account.findOne({ email: rEmail, username: rUsername},'_id');
         if(userAccount == null){
