@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Account = mongoose.model('accounts');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-const passwordRegex = new RegExp("^(\w*)$ ");
+//const passwordRegex = new RegExp("^(\w*)$ ");
 
 module.exports = app => {
     // Create
@@ -18,7 +18,7 @@ module.exports = app => {
             return;
         } */
 
-        if(!passwordRegex.test(rPassword))
+        if(rPassword[0]==null)
         {
             response.code = 2;
             response.msg = "Unsafe password";
@@ -40,6 +40,7 @@ module.exports = app => {
                 bcrypt.hash(rPassword, 10, async (err, hash) => {
                    
                     var newAccount = new Account({
+                       
                         email: rEmail,
                         username : rUsername,
                         password : hash,
@@ -73,9 +74,7 @@ module.exports = app => {
     
     // Login
     app.post('/account/login', async (req, res) => {
-
         var response = {};
-
         const { rUsername, rPassword } = req.body;
        /* if(rUsername == null)
         {
