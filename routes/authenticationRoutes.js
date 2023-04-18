@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Account = mongoose.model('accounts');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-const passwordRegex = new RegExp("(?=.*[a-z])(?=.*[0-9])");
+const passwordRegex = new RegExp("^(\w*)$ ");
 
 module.exports = app => {
     // Create
@@ -18,13 +18,13 @@ module.exports = app => {
             return;
         } */
 
-       /* if(!passwordRegex.test(rPassword))
+        if(!passwordRegex.test(rPassword))
         {
             response.code = 2;
             response.msg = "Unsafe password";
             res.send(response);
             return;
-        }*/
+        }
 
         var userAccount = await Account.findOne({ email: rEmail, username: rUsername},'_id');
         if(userAccount == null){
@@ -85,7 +85,7 @@ module.exports = app => {
             return;
         }*/
 
-        var userAccount = await Account.findOne({ username: rUsername}, 'username password');
+        var userAccount = await Account.findOne({ username: rUsername});
         if(userAccount != null){
             bcrypt.compare(rPassword, userAccount.password, async (err, success) => {
                 if (success) {
