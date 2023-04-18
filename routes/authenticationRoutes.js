@@ -10,17 +10,17 @@ module.exports = app => {
         var response = {};
         const { rEmail, rUsername, rPassword } = req.body;
 
-        if(1>10)
+        if(rUsername == null || rUsername.length < 3 || rUsername.length > 24)
         {
-            response.code = 22;
+            response.code = 1;
             response.msg = "Invalid username";
             res.send(response);
             return;
         }
 
-        if(1>10)
+        if(!passwordRegex.test(rPassword))
         {
-            response.code = 21;
+            response.code = 2;
             response.msg = "Unsafe password";
             res.send(response);
             return;
@@ -61,7 +61,7 @@ module.exports = app => {
                 
             });
         } else {
-            response.code = 1;
+            response.code = 3;
             response.msg = "Account already exists";
             res.send(response);
         }
@@ -79,7 +79,7 @@ module.exports = app => {
         const { rUsername, rPassword } = req.body;
         if(rUsername == null || !passwordRegex.test(rPassword))
         {
-            response.code = 3;
+            response.code = 1;
             response.msg = "Invalid credentials";
             res.send(response);
             return;
