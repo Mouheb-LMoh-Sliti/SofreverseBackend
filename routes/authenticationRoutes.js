@@ -10,13 +10,13 @@ module.exports = app => {
         var response = {};
         const { rEmail, rUsername, rPassword } = req.body;
 
-        if(rUsername == "" || rUsername.length < 3 || rUsername.length > 24)
+       /* if(rUsername == "" || rUsername.length < 3 || rUsername.length > 24)
         {
             response.code = 1;
             response.msg = "Invalid username";
             res.send(response);
             return;
-        }
+        } */
 
         if(!passwordRegex.test(rPassword))
         {
