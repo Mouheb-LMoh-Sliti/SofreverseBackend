@@ -18,13 +18,13 @@ module.exports = app => {
             return;
         } */
 
-        if(!passwordRegex.test(rPassword))
+       /* if(!passwordRegex.test(rPassword))
         {
             response.code = 2;
             response.msg = "Unsafe password";
             res.send(response);
             return;
-        }
+        }*/
 
         var userAccount = await Account.findOne({ email: rEmail, username: rUsername},'_id');
         if(userAccount == null){
