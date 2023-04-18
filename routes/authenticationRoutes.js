@@ -80,7 +80,7 @@ module.exports = app => {
        /* if(rUsername == null)
         {
             response.code = 1;
-            response.msg = "Invalid credentials";
+            response.msg = "Invalid username";
             res.send(response);
             return;
         }*/
@@ -98,12 +98,12 @@ module.exports = app => {
                     res.send(response);
             
                     return;
-                } else {
+                } /*else {
                     response.code = 1;
                     response.msg = "Invalid credentials";
                     res.send(response);
                     return;
-                }
+                }*/
             });
             
         }
