@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Account = mongoose.model('accounts');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-const passwordRegex = new RegExp("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,24})");
+const passwordRegex = new RegExp("(?=.*[a-z])(?=.*[0-9])");
 
 module.exports = app => {
     // Create
