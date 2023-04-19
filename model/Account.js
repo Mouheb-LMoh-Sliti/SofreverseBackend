@@ -1,54 +1,52 @@
-import mongoose from 'mongoose';
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
 
-const accountSchema = new Schema(
-    {
-        username: 
-           { 
-                type: String,
-                unique: [true, "username already taken"],
-                required : true
-            },
-
-        email :
-            { 
-                type: String,
-                unique: [true, "mail already taken"],
-                required : true
-             },
-
-        password: 
-             { 
-                type: String,
-                required : true
-             },
-
-        salt: 
-            { 
-                type: String,
-                required : true
-            },
-            
-        experience : 
-            { 
-                type: Number,
-            },
-        
-        level: 
-            { 
-                type: Number,
-             },
-
-        avatarPreset: 
-            {
-               type: String,
-               required: true
-            },
-    
-            lastAuthentication: Date,
-   
+const accountSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true,
+    minlength: 3,
+    maxlength: 20
+  },
+  email: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true,
+    lowercase: true,
+    validate: {
+      validator: function(v) {
+        return /\S+@\S+\.\S+/.test(v);
+      },
+      message: props => `${props.value} is not a valid email address!`
+    }
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  salt: {
+    type: String,
+    required: true
+  },
+  experience: {
+    type: Number,
+    default: 0
+  },
+  level: {
+    type: Number,
+    default: 1
+  },
+  avatarPreset: {
+    type: String,
+    required: true,
+    default: "0,-,0,-,0"
+  },
+  lastAuthentication: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-export default model ("accounts",accountSchema);
-mongoose.model('accounts', accountSchema);
+module.exports = mongoose.model('Account', accountSchema);
