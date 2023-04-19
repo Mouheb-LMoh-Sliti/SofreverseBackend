@@ -1,3 +1,8 @@
+const Account = require("../model/Account");
+const { validationResult } = require("express-validator");
+const bcrypt = require("bcrypt");
+
+
 const signin = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -34,3 +39,38 @@ const signin = async (req, res) => {
     return res.status(500).json({ error: "Server Error" });
   }
 };
+const signup = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(req.body.password, salt);
+    const newUser = await Account.create({
+      username: req.body.username,
+      email: req.body.email,
+      password: hash,
+      salt: salt,
+      experience: 0,
+      level: 1,
+      avatarPreset: "0,-,0,-,0",
+    });
+    return res.status(200).json({
+      username: req.body.username,
+      email: req.body.email,
+      experience: 0,
+      level: 1,
+      avatarPreset: "0,-,0,-,0",
+    });
+  } catch (err) {
+    console.error(err);
+    if (err.code === 11000) {
+      return res.status(500).json({ error: "Username or email already taken" });
+    } else {
+      return res.status(500).json({ error: "Server Error" });
+    }
+  }
+};
+
+module.exports = { signin, signup };
