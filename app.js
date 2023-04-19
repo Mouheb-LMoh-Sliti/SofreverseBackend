@@ -17,6 +17,8 @@ require('./model/Account');
 // Setup the routes
 const authenticationRoutes = require('./routes/authenticationRoutes');
 app.use('/api/auth', authenticationRoutes);
+const accountController = require('./controllers/accountController');
+//app.put('/api/auth/:id/avatarPreset', accountController.updateAvatarPreset);
 
 mongoose.set('debug', true);
 mongoose.Promise = global.Promise;
