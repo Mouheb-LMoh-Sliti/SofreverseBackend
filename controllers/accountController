@@ -11,7 +11,20 @@ const signin = async (req, res) => {
     }
     const success = await bcrypt.compare(password, user.password);
     if (success) {
-      return res.status(200).json({ id: user.id });
+      // Update last authentication date and time
+      user.lastAuthenticated = new Date();
+      await user.save();
+
+      // Return all user data in response
+      return res.status(200).json({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        experience: user.experience,
+        level: user.level,
+        avatarPreset: user.avatarPreset,
+        lastAuthenticated: user.lastAuthenticated,
+      });
     } else {
       return res.status(401).json({ error: "Invalid Credentials" });
     }
@@ -20,6 +33,7 @@ const signin = async (req, res) => {
     return res.status(500).json({ error: "Server Error" });
   }
 };
+
 
 const signup = async (req, res) => {
   try {
@@ -56,3 +70,6 @@ const signup = async (req, res) => {
 };
 
 module.exports = { signin, signup };
+
+
+
