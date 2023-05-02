@@ -1,8 +1,9 @@
+require("dotenv").config();
+
 const Account = require("../model/Account");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 
 const signin = async (req, res) => {
   try {
@@ -22,7 +23,7 @@ const signin = async (req, res) => {
       await user.save();
 
       // Create and sign a JWT token
-      const token = jwt.sign({ id: user.id }, process.env.jwtSecret, {
+      const token = jwt.sign({ id: user.id }, ""+process.env.jwtSecret, {
         expiresIn: "2h",
       });
 
@@ -66,7 +67,7 @@ const signup = async (req, res) => {
     });
 
     // Create and sign a JWT token
-    const token = jwt.sign({ id: newUser.id }, process.env.jwtSecret, {
+    const token = jwt.sign({ id: newUser.id }, ""+process.env.jwtSecret, {
       expiresIn: "2h",
     });
 
