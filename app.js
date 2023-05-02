@@ -1,8 +1,9 @@
+require('dotenv').config();
+
 const express = require('express');
 const keys = require('./config/keys.js');
 const app = express();
 const bodyParser = require('body-parser');
-require('dotenv').config();
 
 
 // parse application/x-www-form-urlencoded
