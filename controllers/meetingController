@@ -39,6 +39,7 @@ exports.editMeeting = async (req, res) => {
     meeting.label = label;
     meeting.startTime = startTime;
     meeting.location = location;
+    
 
     await meeting.save();
 
