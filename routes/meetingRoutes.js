@@ -4,7 +4,7 @@ const authMiddleware = require('../middleware/authMiddleware.js');
 const Meeting = require('../model/Meeting');
 
 // POST /meetings - create a new meeting
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/create', authMiddleware, async (req, res) => {
   try {
     const { label, startTime, location } = req.body;
     const owner = req.user._id;
@@ -74,5 +74,17 @@ router.delete('/:id', authMiddleware, async (req, res) => {
     res.status(500).json({ error: 'Server error. Failed to delete the meeting.' });
   }
 });
+
+// GET  - get all meetings in which a user is a participant
+router.get('/', authMiddleware, async (req, res) => {
+  try {
+    const meetings = await Meeting.find({ participants: req.user._id });
+    res.json(meetings);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error. Failed to retrieve meetings.' });
+  }
+});
+
 
 module.exports = router;

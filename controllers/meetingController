@@ -18,27 +18,38 @@ exports.createMeeting = async (req, res) => {
     res.status(500).json({ error: 'Server error.' });
   }
 };
-exports.editMeeting = async (req, res) => {
+async function editMeeting(req, res) {
   const { id } = req.params;
-  const { label, startTime, location, participants } = req.body;
+  const { label, startTime, location, participantUsernames } = req.body;
 
   try {
-    const meeting = await Meeting.findOneAndUpdate(
-      { _id: id, owner: req.user.id },
-      { label, startTime, location, participants },
-      { new: true }
-    );
-
+    const meeting = await Meeting.findById(id);
     if (!meeting) {
-      return res.status(404).json({ error: 'Meeting not found.' });
+      return res.status(404).send({ message: 'Meeting not found' });
     }
 
-    res.json({ meeting });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error.' });
+    const participants = await Account.find({ username: { $in: participantUsernames } });
+
+    if (participants.length !== participantUsernames.length) {
+      const notFoundUsernames = participantUsernames.filter(username => !participants.find(u => u.username === username));
+      return res.status(400).send({ message: `Could not find users with the following usernames: ${notFoundUsernames.join(', ')}` });
+    }
+
+    meeting.label = label;
+    meeting.startTime = startTime;
+    meeting.location = location;
+    meeting.participants = [...meeting.participants, ...participants.map(p => p._id)];
+
+    await meeting.save();
+
+    res.send(meeting);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'An error occurred while updating the meeting' });
   }
-};
+}
+
+
 
 exports.deleteMeeting = async (req, res) => {
   const { id } = req.params;
@@ -59,3 +70,20 @@ exports.deleteMeeting = async (req, res) => {
     res.status(500).json({ error: 'Server error.' });
  
   }};
+
+  exports.getParticipantMeetings = async (req, res) => {
+    const userId = req.user.id;
+  
+    try {
+      const meetings = await Meeting.find({
+        startTime: { $gt: Date.now() }, // Only get upcoming meetings
+        participants: userId,
+      });
+  
+      res.json({ meetings });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Server error.' });
+    }
+  };
+  

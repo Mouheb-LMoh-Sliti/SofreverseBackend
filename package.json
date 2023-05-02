@@ -28,6 +28,6 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.22",
-    "dotenv": "16.0.3"
+    "dotenv": "^16.0.3"
   }
 }
