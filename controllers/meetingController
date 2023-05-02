@@ -1,4 +1,4 @@
-const Meeting = require('../models/meetings');
+const Meeting = require('../model/Meeting');
 
 exports.createMeeting = async (req, res) => {
   const { label, startTime, location } = req.body;

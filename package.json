@@ -27,6 +27,7 @@
     "webpack-dev-server": "^4.13.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "dotenv": "16.0.3"
   }
 }
