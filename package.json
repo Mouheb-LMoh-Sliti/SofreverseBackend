@@ -14,6 +14,8 @@
     "bcrypt": "^5.1.0",
     "config": "^3.3.9",
     "connect": "^3.7.0",
+    "core-util-is": "^1.0.3",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "express-validator": "^7.0.1",
@@ -22,8 +24,7 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "serve-static": "^1.15.0",
-    "dotenv": "^16.0.3"
-
+    "webpack-dev-server": "^4.13.3"
   },
   "devDependencies": {
     "dotenv": "^16.0.3",
