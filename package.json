@@ -21,7 +21,9 @@
     "mongoose": "^7.0.3",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
-    "serve-static": "^1.15.0"
+    "serve-static": "^1.15.0",
+    "dotenv": "^16.0.3"
+
   },
   "devDependencies": {
     "dotenv": "^16.0.3",
