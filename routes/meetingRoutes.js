@@ -67,7 +67,7 @@ router.delete('/:id', authMiddleware, async (req, res) => {
       return res.status(401).json({ error: 'Unauthorized. You are not the owner of this meeting.' });
     }
 
-    await meeting.remove();
+    await meeting.deleteOne();
     res.json({ message: 'Meeting deleted successfully.' });
   } catch (err) {
     console.error(err);
