@@ -1,3 +1,4 @@
+
 require('dotenv').config();
 
 const express = require('express');
@@ -28,7 +29,7 @@ app.use('/api/friends', friendsRoutes);
 
 
 const meetingRoutes = require('./routes/meetingRoutes');
-app.use('/api/meetings', meetingRoutes);
+app.use('/api/meet', meetingRoutes);
 
 mongoose.set('debug', true);
 mongoose.Promise = global.Promise;
