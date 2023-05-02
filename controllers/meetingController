@@ -1,0 +1,20 @@
+const Meeting = require('../models/meetings');
+
+exports.createMeeting = async (req, res) => {
+  const { label, startTime, location } = req.body;
+  const owner = req.user.id;
+
+  try {
+    const meeting = await Meeting.create({
+      label,
+      startTime,
+      owner,
+      location,
+    });
+
+    res.status(201).json({ meeting });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error.' });
+  }
+};

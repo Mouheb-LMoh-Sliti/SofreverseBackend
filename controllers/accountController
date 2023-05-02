@@ -1,7 +1,8 @@
 const Account = require("../model/Account");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
-
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const signin = async (req, res) => {
   try {
@@ -20,7 +21,12 @@ const signin = async (req, res) => {
       user.lastAuthenticated = new Date();
       await user.save();
 
-      // Return all user data and time difference in response
+      // Create and sign a JWT token
+      const token = jwt.sign({ id: user.id }, process.env.jwtSecret, {
+        expiresIn: "2h",
+      });
+
+      // Return all user data, time difference and JWT token in response
       return res.status(200).json({
         id: user.id,
         username: user.username,
@@ -30,6 +36,7 @@ const signin = async (req, res) => {
         avatarPreset: user.avatarPreset,
         lastAuthenticated: user.lastAuthenticated,
         passed24Hours: hoursDiff >= 24,
+        token,
       });
     } else {
       return res.status(401).json({ error: "Invalid Credentials" });
@@ -39,6 +46,7 @@ const signin = async (req, res) => {
     return res.status(500).json({ error: "Server Error" });
   }
 };
+
 const signup = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -56,12 +64,21 @@ const signup = async (req, res) => {
       level: 1,
       avatarPreset: "0,-,0,-,0",
     });
+
+    // Create and sign a JWT token
+    const token = jwt.sign({ id: newUser.id }, process.env.jwtSecret, {
+      expiresIn: "2h",
+    });
+
+    // Return user data and JWT token in response
     return res.status(200).json({
-      username: req.body.username,
-      email: req.body.email,
-      experience: 0,
-      level: 1,
-      avatarPreset: "0,-,0,-,0",
+      id: newUser.id,
+      username: newUser.username,
+      email: newUser.email,
+      experience: newUser.experience,
+      level: newUser.level,
+      avatarPreset: newUser.avatarPreset,
+      token,
     });
   } catch (err) {
     console.error(err);
@@ -82,6 +99,7 @@ const updateAvatarPreset = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
+
 
     user.avatarPreset = avatarPreset;
     await user.save();

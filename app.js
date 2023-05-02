@@ -1,7 +1,9 @@
 const express = require('express');
-const keys = require('./config/keys');
+const keys = require('./config/keys.js');
 const app = express();
 const bodyParser = require('body-parser');
+require('dotenv').config();
+
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -17,8 +19,9 @@ require('./model/Account');
 // Setup the routes
 const authenticationRoutes = require('./routes/authenticationRoutes');
 app.use('/api/auth', authenticationRoutes);
-const accountController = require('./controllers/accountController');
-//app.put('/api/auth/:id/avatarPreset', accountController.updateAvatarPreset);
+
+const friendsRoutes = require('./routes/friendsRoutes');
+app.use('/api/friends', friendsRoutes);
 
 mongoose.set('debug', true);
 mongoose.Promise = global.Promise;

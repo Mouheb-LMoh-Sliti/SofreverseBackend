@@ -46,7 +46,15 @@ const accountSchema = new mongoose.Schema({
   lastAuthentication: {
     type: Date,
     default: Date.now
-  }
+  },
+  token:{
+    type :String,
+  },
+  friends: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Account',
+    },
+  ],
 });
-
 module.exports = mongoose.model('Account', accountSchema);

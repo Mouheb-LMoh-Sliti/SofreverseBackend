@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { body,param } = require('express-validator');
+const { body } = require('express-validator');
 const { signup, signin, updateAvatarPreset } = require('../controllers/accountController');
 const accountController = require('../controllers/accountController');
 
@@ -28,5 +28,6 @@ router.route("/updateAvatar").put
   body('avatarPreset').isString().withMessage('Invalid avatar preset'),
   accountController.updateAvatarPreset
   );
+  
 module.exports = router;
 
