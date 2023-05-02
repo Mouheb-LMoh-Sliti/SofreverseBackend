@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middlewares/authMiddleware');
-const Meeting = require('../models/meetingModel');
+const authMiddleware = require('../middleware/authMiddleware.js');
+const Meeting = require('../model/Meeting');
 
 // POST /meetings - create a new meeting
 router.post('/', authMiddleware, async (req, res) => {

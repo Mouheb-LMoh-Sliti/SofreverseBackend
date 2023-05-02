@@ -15,6 +15,8 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useUnifiedTopology: tru
 
 // Setup database models
 require('./model/Account');
+require('./model/Meeting');
+
 
 // Setup the routes
 const authenticationRoutes = require('./routes/authenticationRoutes');
@@ -22,6 +24,10 @@ app.use('/api/auth', authenticationRoutes);
 
 const friendsRoutes = require('./routes/friendsRoutes');
 app.use('/api/friends', friendsRoutes);
+
+
+const meetingRoutes = require('./routes/meetingRoutes');
+app.use('/api/meetings', meetingRoutes);
 
 mongoose.set('debug', true);
 mongoose.Promise = global.Promise;
