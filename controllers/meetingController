@@ -18,37 +18,36 @@ exports.createMeeting = async (req, res) => {
     res.status(500).json({ error: 'Server error.' });
   }
 };
-async function editMeeting(req, res) {
+exports.editMeeting = async (req, res) => {
   const { id } = req.params;
   const { label, startTime, location, participantUsernames } = req.body;
 
   try {
-    const meeting = await Meeting.findById(id);
+    const meeting = await Meeting.findOne({ _id: id, owner: req.user.id });
+
     if (!meeting) {
-      return res.status(404).send({ message: 'Meeting not found' });
+      return res.status(404).json({ error: 'Meeting not found.' });
     }
 
+    // Find participants by their usernames
     const participants = await Account.find({ username: { $in: participantUsernames } });
 
-    if (participants.length !== participantUsernames.length) {
-      const notFoundUsernames = participantUsernames.filter(username => !participants.find(u => u.username === username));
-      return res.status(400).send({ message: `Could not find users with the following usernames: ${notFoundUsernames.join(', ')}` });
-    }
+    // Add participants' ObjectIds to the meeting
+    meeting.participants = participants.map(participant => participant._id);
 
+    // Update other fields of the meeting
     meeting.label = label;
     meeting.startTime = startTime;
     meeting.location = location;
-    meeting.participants = [...meeting.participants, ...participants.map(p => p._id)];
 
     await meeting.save();
 
-    res.send(meeting);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: 'An error occurred while updating the meeting' });
+    res.json({ meeting });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error.' });
   }
-}
-
+};
 
 
 exports.deleteMeeting = async (req, res) => {

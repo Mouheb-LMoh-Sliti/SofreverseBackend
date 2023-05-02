@@ -3,7 +3,7 @@ const router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware.js');
 const Meeting = require('../model/Meeting');
 
-// POST /meetings - create a new meeting
+// POST /create - create a new meeting
 router.post('/create', authMiddleware, async (req, res) => {
   try {
     const { label, startTime, location } = req.body;
@@ -26,7 +26,7 @@ router.post('/create', authMiddleware, async (req, res) => {
   }
 });
 
-// PUT /meetings/:id - edit an existing meeting
+// PUT /meet/:id - edit an existing meeting
 router.put('/:id', authMiddleware, async (req, res) => {
   try {
     const { label, startTime, location, participants } = req.body;
@@ -54,7 +54,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
   }
 });
 
-// DELETE /meetings/:id - delete an existing meeting
+// DELETE /meet/:id - delete an existing meeting
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     const meeting = await Meeting.findById(req.params.id);

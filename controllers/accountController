@@ -24,9 +24,10 @@ const signin = async (req, res) => {
       await user.save();
 
       // Create and sign a JWT token
-      const token = jwt.sign({ id: user.id }, 'ssss', {
-        expiresIn: "2h",
+      const token = jwt.sign({ id: user.id },process.env.jwtSecret, {
+        expiresIn: "60h",
       });
+     
 
       // Return all user data, time difference and JWT token in response
       return res.status(200).json({
@@ -69,7 +70,7 @@ const signup = async (req, res) => {
 
     // Create and sign a JWT token
     const token = jwt.sign({ id: newUser.id }, process.env.jwtSecret, {
-      expiresIn: "2h",
+      expiresIn: "60h",
     });
 
     // Return user data and JWT token in response
