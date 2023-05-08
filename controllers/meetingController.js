@@ -10,7 +10,7 @@ exports.createMeeting = async (req, res) => {
       label,
       startTime,
       owner,
-      location,
+      //location,
     });
 
     res.status(201).json({ meeting });
@@ -22,7 +22,7 @@ exports.createMeeting = async (req, res) => {
 
 exports.editMeeting = async (req, res) => {
   const { id } = req.params;
-  const { label, startTime, location, participantUsernames } = req.body;
+  const { label, startTime, participantUsernames } = req.body;
 
   try {
     const meeting = await Meeting.findOne({ _id: id, owner: req.user.id });
@@ -40,7 +40,7 @@ exports.editMeeting = async (req, res) => {
     // Update other fields of the meeting
     meeting.label = label;
     meeting.startTime = startTime;
-    meeting.location = location;
+   // meeting.location = location;
 
     await meeting.save();
 
