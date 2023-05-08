@@ -6,7 +6,7 @@ const Meeting = require('../model/Meeting');
 // POST /create - create a new meeting
 router.post('/create', authMiddleware, async (req, res) => {
   try {
-    const { label, startTime, location } = req.body;
+    const { label, startTime } = req.body;
     const owner = req.user._id;
     const participants = [owner]; // Add the owner as a participant
 
@@ -14,7 +14,6 @@ router.post('/create', authMiddleware, async (req, res) => {
       label,
       startTime,
       owner,
-      location,
       participants
     });
 
@@ -29,7 +28,7 @@ router.post('/create', authMiddleware, async (req, res) => {
 // PUT /meet/:id - edit an existing meeting
 router.put('/:id', authMiddleware, async (req, res) => {
   try {
-    const { label, startTime, location, participants } = req.body;
+    const { label, startTime, participants } = req.body;
 
     const meeting = await Meeting.findById(req.params.id);
 
@@ -43,7 +42,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
 
     meeting.label = label;
     meeting.startTime = startTime;
-    meeting.location = location;
+    //meeting.location = location;
     meeting.participants = participants;
 
     await meeting.save();
