@@ -1,11 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
-const { signup, signin, updateAvatarPreset } = require('../controllers/accountController');
-const accountController = require('../controllers/accountController');
-
-
-
+const { signup, signin, updateAvatarPreset, updateIcone } = require('../controllers/accountController');
 
 router.route('/signin').post(signin);
 
@@ -22,12 +18,16 @@ router.route('/signup').post(
   signup
 );
 
-router.route("/updateAvatar").put
-(
+router.route('/updateAvatar').put(
   body('id').isString().withMessage('Invalid id'),
   body('avatarPreset').isString().withMessage('Invalid avatar preset'),
-  accountController.updateAvatarPreset
-  );
-  
-module.exports = router;
+  updateAvatarPreset
+);
 
+router.route('/updateIcone').put(
+  body('id').isString().withMessage('Invalid id'),
+  body('icone').isString().withMessage('Invalid icone'),
+  updateIcone
+);
+
+module.exports = router;

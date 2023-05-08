@@ -47,6 +47,10 @@ const accountSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  icone :{
+    type: String,
+    default: "default",
+    },
   token:{
     type :String,
   },

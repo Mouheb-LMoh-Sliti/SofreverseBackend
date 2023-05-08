@@ -40,6 +40,7 @@ const signin = async (req, res) => {
         avatarPreset: user.avatarPreset,
         lastAuthenticated: user.lastAuthenticated,
         passed24Hours: hoursDiff >= 24,
+        icone : "default",
         token,
       });
     } else {
@@ -67,6 +68,7 @@ const signup = async (req, res) => {
       experience: 0,
       level: 1,
       avatarPreset: "0,-,0,-,0",
+      icone : "default",
     });
 
     // Create and sign a JWT token
@@ -82,6 +84,7 @@ const signup = async (req, res) => {
       experience: newUser.experience,
       level: newUser.level,
       avatarPreset: newUser.avatarPreset,
+      icone: newUser.icone,
       token,
     });
   } catch (err) {
@@ -115,6 +118,29 @@ const updateAvatarPreset = async (req, res) => {
   }
 };
 
-module.exports = { signin, signup, updateAvatarPreset };
+const updateIcone = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const { icone } = req.body;
+
+    const updatedUser = await Account.findByIdAndUpdate(
+      id,
+      { icone: icone },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.status(200).json({ message: "Icone updated successfully" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server Error" });
+  }
+};
+
+
+module.exports = { signin, signup, updateAvatarPreset, updateIcone };
 
 
