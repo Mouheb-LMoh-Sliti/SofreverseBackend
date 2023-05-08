@@ -2,7 +2,7 @@ const Meeting = require('../model/Meeting');
 const Account = require('../model/Account');
 
 exports.createMeeting = async (req, res) => {
-  const { label, startTime, location } = req.body;
+  const { label, startTime } = req.body;
   const owner = req.user.id;
 
   try {
@@ -75,13 +75,21 @@ exports.getParticipantMeetings = async (req, res) => {
   const userId = req.user.id;
 
   try {
-    const meetings = await Meeting.find({
-      startTime: { $gt: Date.now() }, // Only get upcoming meetings
-      participants: userId,
-    });
+    const meetings = await Meeting.aggregate([
+      {
+        $match: { participants: userId, startTime: { $gt: Date.now() } },
+      },
+      {
+        $group: { _id: "$_id", meeting: { $first: "$$ROOT" } },
+      },
+      {
+        $replaceRoot: { newRoot: "$meeting" },
+      },
+    ]);
 
     res.json({ meetings });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error.' });
-  }}
+  }
+}
