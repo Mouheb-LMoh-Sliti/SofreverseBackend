@@ -4,6 +4,8 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 
 const signin = async (req, res) => {
@@ -25,7 +27,7 @@ const signin = async (req, res) => {
 
       // Create and sign a JWT token
       const token = jwt.sign({ id: user.id },process.env.jwtSecret, {
-        expiresIn: "60h",
+        expiresIn: "10y",
       });
      
 
@@ -70,7 +72,7 @@ const signup = async (req, res) => {
 
     // Create and sign a JWT token
     const token = jwt.sign({ id: newUser.id }, process.env.jwtSecret, {
-      expiresIn: "60h",
+      expiresIn: "10y",
     });
 
     // Return user data and JWT token in response
