@@ -17,13 +17,6 @@ const meetingSchema = new mongoose.Schema({
     ref: 'Account',
     required: true
   },
-  location: {
-    type: String,
-    required: true,
-    trim: true,
-    minlength: 1,
-    maxlength: 50
-  },
   participants: [
     {
       type: mongoose.Schema.Types.ObjectId,
