@@ -17,12 +17,6 @@ exports.createMeeting= async (req, res) => {
         owner,
         participants: participantIds,
       });
-  
-      console.log(participantUsernames);
-      console.log(participants);
-      console.log(participantIds);
-      console.log(meeting);
-  
       res.status(201).json(meeting);
     } catch (err) {
       console.error(err);
