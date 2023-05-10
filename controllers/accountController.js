@@ -1,9 +1,10 @@
 
+require("dotenv").config();
+
 const Account = require("../model/Account");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 
 
 
@@ -72,8 +73,11 @@ const signup = async (req, res) => {
     });
 
     // Create and sign a JWT token
+    console.log('jwtSecret:', process.env.jwtSecret);
+
     const token = jwt.sign({ id: newUser.id }, ""+process.env.jwtSecret, {
       expiresIn: "10y",
+      algorithm: 'HS256'
     });
 
     // Return user data and JWT token in response
@@ -85,7 +89,6 @@ const signup = async (req, res) => {
       level: newUser.level,
       avatarPreset: newUser.avatarPreset,
       icone: newUser.icone,
-      token,
     });
   } catch (err) {
     console.error(err);

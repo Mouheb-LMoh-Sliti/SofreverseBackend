@@ -2,19 +2,30 @@ const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware.js');
 const Meeting = require('../model/Meeting');
+const Account = require('../model/Account.js');
+
 
 // POST /create - create a new meeting
 router.post('/create', authMiddleware, async (req, res) => {
   try {
-    const { label, startTime } = req.body;
+    const { label, startTime, participants } = req.body;
     const owner = req.user._id;
-    const participants = [owner]; // Add the owner as a participant
+
+    // Add the owner as a participant
+    const participantIds = [owner];
+
+    // Find the accounts for the requested participants
+    const participantUsernames = participants || [];
+    const participantAccounts = await Account.find({ username: { $in: participantUsernames } });
+
+    // Add the participant ids to the list of participants for the meeting
+    participantAccounts.forEach(account => participantIds.push(account._id));
 
     const meeting = new Meeting({
       label,
       startTime,
       owner,
-      participants
+      participants: participantIds
     });
 
     await meeting.save();
@@ -24,6 +35,7 @@ router.post('/create', authMiddleware, async (req, res) => {
     res.status(500).json({ error: 'Server error. Failed to create a new meeting.' });
   }
 });
+
 
 // PUT /meet/:id - edit an existing meeting
 router.put('/:id', authMiddleware, async (req, res) => {

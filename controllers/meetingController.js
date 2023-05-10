@@ -1,24 +1,35 @@
 const Meeting = require('../model/Meeting');
 const Account = require('../model/Account');
 
-exports.createMeeting = async (req, res) => {
-  const { label, startTime } = req.body;
-  const owner = req.user.id;
-
-  try {
-    const meeting = await Meeting.create({
-      label,
-      startTime,
-      owner,
-      //location,
-    });
-
-    res.status(201).json({ meeting });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error.' });
+exports.createMeeting= async (req, res) => {
+    const { label, startTime, owner, participantUsernames } = req.body;
+    if (!Array.isArray(participantUsernames)) {
+      return res.status(400).json({ error: 'participantUsernames must be an array' });
+    }
+    
+    try {
+      const participants = await Account.find({ username: { $in: participantUsernames } });
+      const participantIds = participants.map(participant => participant._id);
+  
+      const meeting = await Meeting.create({
+        label,
+        startTime,
+        owner,
+        participants: participantIds,
+      });
+  
+      console.log(participantUsernames);
+      console.log(participants);
+      console.log(participantIds);
+      console.log(meeting);
+  
+      res.status(201).json(meeting);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server Error' });
+    }
   }
-};
+
 
 exports.editMeeting = async (req, res) => {
   const { id } = req.params;
@@ -34,13 +45,12 @@ exports.editMeeting = async (req, res) => {
     // Find participants by their usernames
     const participants = await Account.find({ username: { $in: participantUsernames } });
 
-    // Add participants' usernames to the meeting
-    meeting.participants = participants.map(participant => participant.username);
+    // Update participants of the meeting
+    meeting.participants = participants.map(participant => participant._id);
 
     // Update other fields of the meeting
     meeting.label = label;
     meeting.startTime = startTime;
-   // meeting.location = location;
 
     await meeting.save();
 
@@ -50,6 +60,7 @@ exports.editMeeting = async (req, res) => {
     res.status(500).json({ error: 'Server error.' });
   }
 };
+
 
 exports.deleteMeeting = async (req, res) => {
   const { id } = req.params;
@@ -77,7 +88,7 @@ exports.getParticipantMeetings = async (req, res) => {
   try {
     const meetings = await Meeting.aggregate([
       {
-        $match: { participants: userId, startTime: { $gt: Date.now() } },
+        $match: { participants: userId, startTime: { $gt: new Date() } },
       },
       {
         $group: { _id: "$_id", meeting: { $first: "$$ROOT" } },
