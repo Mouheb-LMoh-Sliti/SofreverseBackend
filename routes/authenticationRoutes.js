@@ -30,4 +30,10 @@ router.route('/updateIcone').put(
   updateIcone
 );
 
+router.route('/updateXp').put(
+  body('id').isString().withMessage('Invalid id'),
+  updateXp
+);
+
+
 module.exports = router;

@@ -142,8 +142,28 @@ const updateIcone = async (req, res) => {
     return res.status(500).json({ error: "Server Error" });
   }
 };
+const updateXp = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const { xp } = req.body;
+
+    const user = await Account.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Update the user's experience with the new value
+    user.experience = xp;
+    await user.save();
+
+    return res.status(200).json({ message: "Experience updated successfully" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server Error" });
+  }
+};
 
 
-module.exports = { signin, signup, updateAvatarPreset, updateIcone };
+module.exports = { signin, signup, updateAvatarPreset, updateIcone, updateXp };
 
 
