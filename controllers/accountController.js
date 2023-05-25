@@ -151,11 +151,8 @@ const updateXp = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-
-    // Update the user's experience with the new value
     user.experience = xp;
     await user.save();
-
     return res.status(200).json({ message: "Experience updated successfully" });
   } catch (err) {
     console.error(err);

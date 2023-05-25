@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
-const { signup, signin, updateAvatarPreset, updateIcone } = require('../controllers/accountController');
+const { signup, signin, updateAvatarPreset, updateIcone, updateXp } = require('../controllers/accountController');
 
 router.route('/signin').post(signin);
 
