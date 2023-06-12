@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
-const { signup, signin, updateAvatarPreset, updateIcone, updateXp } = require('../controllers/accountController');
+const { signup, signin, updateAvatarPreset, getIcone, updateIcone, updateXp } = require('../controllers/accountController');
 
 router.route('/signin').post(signin);
 
@@ -14,7 +14,7 @@ router.route('/signup').post(
   body('email').isEmail().withMessage('email invalid'),
   body('password')
     .isLength({ min: 4 })
-    .withMessage('password must be a minimum 4 characters long'),
+    .withMessage('password must be a minimum of 4 characters long'),
   signup
 );
 
@@ -24,6 +24,8 @@ router.route('/updateAvatar').put(
   updateAvatarPreset
 );
 
+router.route('/getIcone/:id').get(getIcone);
+
 router.route('/updateIcone').put(
   body('id').isString().withMessage('Invalid id'),
   body('icone').isString().withMessage('Invalid icone'),
@@ -32,8 +34,9 @@ router.route('/updateIcone').put(
 
 router.route('/updateXp').put(
   body('id').isString().withMessage('Invalid id'),
+  body('xp').isNumeric().withMessage('Invalid xp'),
+  body('level').isNumeric().withMessage('Invalid level'),
   updateXp
 );
-
 
 module.exports = router;

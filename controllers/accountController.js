@@ -1,12 +1,7 @@
-
-require("dotenv").config();
-
 const Account = require("../model/Account");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
-
 
 const signin = async (req, res) => {
   try {
@@ -26,12 +21,11 @@ const signin = async (req, res) => {
       await user.save();
 
       // Create and sign a JWT token
-      const token = jwt.sign({ id: user.id },""+process.env.jwtSecret, {
+      const token = jwt.sign({ id: user.id }, "" + process.env.jwtSecret, {
         expiresIn: "10y",
       });
-     
 
-      // Return all user data, time difference and JWT token in response
+      // Return all user data, time difference, and JWT token in response
       return res.status(200).json({
         id: user.id,
         username: user.username,
@@ -41,7 +35,7 @@ const signin = async (req, res) => {
         avatarPreset: user.avatarPreset,
         lastAuthenticated: user.lastAuthenticated,
         passed24Hours: hoursDiff >= 24,
-        icone : "default",
+        icone: user.icone,
         token,
       });
     } else {
@@ -69,15 +63,13 @@ const signup = async (req, res) => {
       experience: 0,
       level: 1,
       avatarPreset: "0,-,0,-,0",
-      icone : "default",
+      icone: "default",
     });
 
     // Create and sign a JWT token
-    console.log('jwtSecret:', process.env.jwtSecret);
-
-    const token = jwt.sign({ id: newUser.id }, ""+process.env.jwtSecret, {
+    const token = jwt.sign({ id: newUser.id }, "" + process.env.jwtSecret, {
       expiresIn: "10y",
-      algorithm: 'HS256'
+      algorithm: "HS256",
     });
 
     // Return user data and JWT token in response
@@ -89,6 +81,7 @@ const signup = async (req, res) => {
       level: newUser.level,
       avatarPreset: newUser.avatarPreset,
       icone: newUser.icone,
+      token,
     });
   } catch (err) {
     console.error(err);
@@ -110,11 +103,27 @@ const updateAvatarPreset = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-
     user.avatarPreset = avatarPreset;
     await user.save();
 
     return res.status(200).json({ message: "Avatar preset updated successfully" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server Error" });
+  }
+};
+
+const getIcone = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await Account.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const icone = user.icone;
+    return res.status(200).json({ icone });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Server Error" });
@@ -136,23 +145,25 @@ const updateIcone = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    return res.status(200).json({ message: "Icone updated successfully" });
+    const updatedIcone = updatedUser.icone;
+    return res.status(200).json({ icone: updatedIcone, message: "Icone updated successfully" });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Server Error" });
   }
 };
+
 const updateXp = async (req, res) => {
   try {
     const { id } = req.body;
-    const { xp } = req.body;
-    const {level} = req.body;
-    
+    const { xp, level } = req.body;
+
     const user = await Account.findById(id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    user.level= level;
+
+    user.level = level;
     user.experience += xp; // Add the value of xp to the existing experience
     await user.save();
     return res.status(200).json({ message: "Experience updated successfully" });
@@ -162,7 +173,11 @@ const updateXp = async (req, res) => {
   }
 };
 
-
-module.exports = { signin, signup, updateAvatarPreset, updateIcone, updateXp };
-
-
+module.exports = {
+  signin,
+  signup,
+  updateAvatarPreset,
+  getIcone,
+  updateIcone,
+  updateXp,
+};
